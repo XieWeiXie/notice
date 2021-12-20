@@ -50,8 +50,7 @@ func (n NoticeWX) Do(v interface{}) error {
 	}
 	response, err := http.DefaultClient.Do(request)
 	defer response.Body.Close()
-	content, err := ioutil.ReadAll(response.Body)
-	fmt.Println(string(content))
+	_, err = ioutil.ReadAll(response.Body)
 	return err
 }
 
