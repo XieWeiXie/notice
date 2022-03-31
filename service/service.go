@@ -24,7 +24,7 @@ func NewIService(_ty int) IService {
 	switch _ty {
 	case ZBi:
 		return zbi.NewZbi()
-	case  XkCoin:
+	case XkCoin:
 		return xkcoin.NewXKCoin()
 	case HuoBi:
 		return huobi.NewHuoBi()

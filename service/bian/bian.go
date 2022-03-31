@@ -13,14 +13,13 @@ import (
 
 var (
 	announcement = "https://www.binance.com/zh-CN/support/announcement/c-48?navId=48"
-	prefix = "https://www.binance.com/zh-CN/support/announcement/"
+	prefix       = "https://www.binance.com/zh-CN/support/announcement/"
 )
 
 type BiAn struct {
-
 }
 
-func (b BiAn) Notice(message string) (err error){
+func (b BiAn) Notice(message string) (err error) {
 	res, err := http.Get(announcement)
 	if err != nil {
 		log.Println(fmt.Sprintf("http.Get fail, err: %v", err))
@@ -36,13 +35,13 @@ func (b BiAn) Notice(message string) (err error){
 
 	json := doc.Find("#__APP_DATA").Text()
 	jsonData := gjson.Parse(json)
-	for _, one := range jsonData.Get("routeProps.b723.navDataResource").Array() {
-		for _ , i := range one.Get("articles").Array() {
+	for _, one := range jsonData.Get("routeProps.b723.catalogs").Array() {
+		for _, i := range one.Get("articles").Array() {
 			var article = new(Catalog)
 			article.Title = i.Get("title").String()
 			article.ReleaseDate = i.Get("releaseDate").Int()
 			article.Date = time.Unix(article.ReleaseDate/1000, 0)
-			article.Link = fmt.Sprintf(prefix + "/%s", i.Get("code").String())
+			article.Link = fmt.Sprintf(prefix+"/%s", i.Get("code").String())
 			fmt.Println(article)
 			now := time.Now()
 			if article.Date.Month() != now.Month() {
@@ -70,12 +69,11 @@ func (b BiAn) Notice(message string) (err error){
 	return
 }
 
-
 type Catalog struct {
-	Title string `json:"title"`
-	ReleaseDate int64 `json:"releaseDate"`
-	Date time.Time `json:"date"`
-	Link string `json:"link"`
+	Title       string    `json:"title"`
+	ReleaseDate int64     `json:"releaseDate"`
+	Date        time.Time `json:"date"`
+	Link        string    `json:"link"`
 }
 
 func NewBiAn() BiAn {
